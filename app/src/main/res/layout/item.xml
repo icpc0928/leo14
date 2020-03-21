@@ -15,7 +15,7 @@ android:orientation="vertical"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textColor="#00f"
-        android:textStyle="boid"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/item_type"
