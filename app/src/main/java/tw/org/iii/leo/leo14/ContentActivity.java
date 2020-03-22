@@ -12,6 +12,12 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -39,7 +45,7 @@ public class ContentActivity extends AppCompatActivity {
         Log.v("leo",strPic);
 
         content.setText(strContent);
-        fetchImage();
+        fetchImageV2();
 
     }
 
@@ -73,6 +79,31 @@ public class ContentActivity extends AppCompatActivity {
 
     }
 
+    private void fetchImageV2(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        ImageRequest request = new ImageRequest(
+                //我們做到現在出現一個問題 Android無法解決http 跟 https 的轉換？ 因為目前使用的ＪＳＯＮ上的照片 url是 http 但是連上去是 https
+                strPic,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        img.setImageBitmap(response);
+                    }
+                },
+                0, 0,
+                Bitmap.Config.ARGB_8888,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("leo",error.toString());
+
+                    }
+                }
+        );
+
+        queue.add(request);
+    }
+
     private class UIHandler extends Handler{
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -82,4 +113,6 @@ public class ContentActivity extends AppCompatActivity {
             img.setImageBitmap(bmp);
         }
     }
+
+
 }
